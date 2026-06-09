@@ -124,4 +124,56 @@ scanner.Dispose()
 ```
 
 ---
+# Spire.OCR - ScanImageWithAI
+## Performs OCR scanning on an image using Spire.OCR and updates AI model configuration via XML.
+
+```vbnet
+Public Partial Class Form1 : Inherits Form
+    Public Sub New()
+        InitializeComponent()
+    End Sub
+
+    Private Sub button1_Click(ByVal sender As Object, ByVal e As EventArgs)
+        Dim filename As String = "../../../../../Data/JapaneseSample.png"
+        Dim outputFile As String = "ScanImageWithAI.txt"
+        Dim filePath As String = "D:\\AI\\ocr.xml"
+        Dim newModel As String = "AIModel"
+        Dim newApiKey As String = "ApiKey"
+        Dim newApiUrl As String = "ApiUrl"
+
+        UpdateOcrConfig(filePath, newModel, newApiKey, newApiUrl)
+        ScanImg(filename, outputFile)
+        TxtViewer(outputFile)
+    End Sub
+
+    Public Shared Sub ScanImg(ByVal filename As String, ByVal outputFile As String)
+        Dim scanner As OcrScanner = New OcrScanner()
+        Dim configureOptions As ConfigureOptions = New ConfigureOptions()
+        configureOptions.ModelPath = "D:\\AI"
+        configureOptions.Language = "Japanese"
+        scanner.ConfigureDependencies(configureOptions)
+        scanner.Scan(filename)
+        File.WriteAllText(outputFile, scanner.Text.ToString())
+    End Sub
+
+    Public Shared Sub UpdateOcrConfig(ByVal filePath As String, ByVal model As String, ByVal apiKey As String, ByVal apiUrl As String)
+        Dim doc As XmlDocument = New XmlDocument()
+        doc.Load(filePath)
+        Dim modelNode As XmlNode = doc.SelectSingleNode("/ocr/configs/model")
+        Dim apiKeyNode As XmlNode = doc.SelectSingleNode("/ocr/configs/apiKey")
+        Dim apiUrlNode As XmlNode = doc.SelectSingleNode("/ocr/configs/apiUrl")
+        If modelNode <> Nothing Then modelNode.InnerText = model
+        If apiKeyNode <> Nothing Then apiKeyNode.InnerText = apiKey
+        If apiUrlNode <> Nothing Then apiUrlNode.InnerText = apiUrl
+        doc.Save(filePath)
+    End Sub
+
+    Private Sub TxtViewer(ByVal outputFile As String)
+        System.Diagnostics.Process.Start(outputFile)
+    End Sub
+End Class
+```
+
+---
+
 

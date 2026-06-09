@@ -213,5 +213,31 @@ scanner.Dispose();
 ```
 
 ---
+# Spire.OCR - ScanImageWithAI
+## Performs OCR scanning on an image using the Spire.OCR library, configuring the model path and language, and returns the recognized text.
+
+```csharp
+public static string ScanImage(string filename)
+{
+    // Create OCR scanner instance
+    OcrScanner scanner = new OcrScanner();
+
+    // Configure OCR options
+    ConfigureOptions configureOptions = new ConfigureOptions();
+    configureOptions.ModelPath = "D:\\AI";
+    configureOptions.Language = "Japanese";
+
+    // Apply configuration to scanner
+    scanner.ConfigureDependencies(configureOptions);
+
+    // Execute OCR scan on the image
+    scanner.Scan(filename);
+
+    return scanner.Text.ToString();
+}
+```
+
+---
+
 
 
